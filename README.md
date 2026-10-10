@@ -1,3 +1,35 @@
+## esp_term ##
+
+### Go ###
+
+**Build (Go 1.21+)**
+```bash
+mkdir esp_term && cd esp_term
+go mod init esp_term
+go mod tidy                        # fetches bubbletea, bubbles, lipgloss, go.bug.st/serial
+go build -ldflags "-s -w" -o esp_term .
+```
+
+**Cross-compiling**
+```bash
+GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o esp_term.exe .
+GOOS=linux   GOARCH=arm64 go build -ldflags "-s -w" -o esp_term-arm64 .
+```
+Build the macOS binary on a Mac. The serial library's port enumerator uses IOKit there, so cross-compiling from Linux or Windows won't work.
+
+**What changed**
+- **Pinned prompt:** Output scrolls in the top pane, a status bar sits in the middle, and your input line stays on the bottom row. Incoming logs no longer interleave with what you're typing.
+- **Status bar:** It shows the port, baud, connection state, timestamp setting, line ending and log file. It also tells you when you've scrolled back.
+- **Scrolling and history:** PgUp/PgDn scroll the output, Esc jumps back to the bottom, and Up/Down recall command history. New output doesn't yank you down while you're reading older lines.
+- **Typing aids:** The input supports cursor movement, paste, and word-wrapped long lines. Text you send is echoed in blue with a `»` prefix, since the board doesn't echo it back.
+- It uses the alternate screen, like `vim` or `htop`, so output doesn't stay in your normal terminal scrollback after you quit. PgUp/PgDn covers scrolling during a session, and `-l file.log` keeps a permanent copy.
+- The device's own ANSI codes are stripped and replaced with the app's coloring. This keeps stray escape sequences from corrupting the layout.
+
+Everything else works the same as the Python version: the same flags (`-p -b -t -l -eol -reset -list`) and the same `/` commands. The log-level coloring, panic highlighting, auto-reconnect and reset/bootloader sequences carry over too.
+
+---
+
+### Python ###
 A single-file Python app that does the core of what web terminals do, plus a few things the browser ones can't. `esp_term.py`, is a single-file serial terminal for ESP32 that needs only `pyserial`.
 
 **Setup and run**
