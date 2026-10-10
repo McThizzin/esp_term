@@ -7,13 +7,13 @@
 mkdir esp_term && cd esp_term
 go mod init esp_term
 go mod tidy                        # fetches bubbletea, bubbles, lipgloss, go.bug.st/serial
-go build -ldflags "-s -w" -o esp_term .
+go build -ldflags "-s -w" -o build/esp_term
 ```
 
 **Cross-compiling**
 ```bash
-GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o esp_term.exe .
-GOOS=linux   GOARCH=arm64 go build -ldflags "-s -w" -o esp_term-arm64 .
+GOOS=windows GOARCH=amd64 go build -ldflags "-s -w" -o build/esp_term.exe
+GOOS=linux   GOARCH=arm64 go build -ldflags "-s -w" -o build/esp_term-arm64
 ```
 Build the macOS binary on a Mac. The serial library's port enumerator uses IOKit there, so cross-compiling from Linux or Windows won't work.
 

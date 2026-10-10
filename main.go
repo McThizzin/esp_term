@@ -3,7 +3,7 @@
 // Build:
 //
 //	go mod init esp_term && go mod tidy
-//	go build -ldflags "-s -w" -o esp_term .
+//	go build -ldflags "-s -w" -o build/esp_term
 package main
 
 import (
